@@ -30,9 +30,9 @@ var map = L.map('mapid').setView([30.33, -81.65], 5);
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {}).addTo(map);
 //L.geoJSON(Mindy).addTo(map);
 
-var stormicon = L.icon ({iconUrl: 'https://cdn-icons-png.flaticon.com/512/4005/4005940.png', iconSize: [50,50], popupAnchor: [0,0]  });
+var stormicon = L.icon ({iconUrl: 'hurricaneicon.png', iconSize: [50,50], popupAnchor: [0,0]  });
 
-var customPopup = "Tropical Storm Mindy<br/><img src='https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Mindy_2021-09-08_2200Z.jpg/440px-Mindy_2021-09-08_2200Z.jpg'width='200px'/>";
+var customPopup = "Tropical Storm Mindy<br/><img src='Mindy.jpg'width='200px'/>";
 
 L.geoJSON(Mindy, {
 pointToLayer: function (feature, latlng) {
