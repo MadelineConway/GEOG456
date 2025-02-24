@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+<script src="cartevals.js"></script>
+<body>
+
+<h2>Presence of Non-recyclable Plastic Clamshells in Residential Recyling Carts</h2>
+
+<table id="evalstable">
+  <tr>
+    <th>Address</th>
+    <th>Clamshell found - 1st evaluation (11/18/2022)</th>
+    <th>Clamshell found - 2nd evaluation (12/2/2022)</th>
+    <th>Clamshell found - 3rd evaluation (12/9/2022)</th>
+  </tr>
+</table>
+
+</body>
+<script>
+    var x = document.getElementById('evalstable')
+    for (var i = 0; i < data.features.length; i++){
+        var myNewRow = document.createElement('tr');
+        var myNewCell1 = document.createElement('td');
+        var myNewCell2 = document.createElement('td');
+        var myNewCell3 = document.createElement('td');
+        var myNewCell4 = document.createElement('td');
+        myNewCell1.innerText = data.features[i].properties.Add_st;
+        myNewCell2.innerText = data.features[i].properties.Clamshell_1;
+        myNewCell3.innerText = data.features[i].properties.Clamshell_2;
+        myNewCell4.innerText = data.features[i].properties.Clamshell_3;
+
+        if (data.features[i].properties.Clamshell_1 == 'TRUE') {myNewCell2.style.backgroundColor = 'red'}
+        if (data.features[i].properties.Clamshell_1 == 'FALSE') {myNewCell2.style.backgroundColor = 'green'}
+        if (data.features[i].properties.Clamshell_2 == 'TRUE') {myNewCell3.style.backgroundColor = 'red'}
+        if (data.features[i].properties.Clamshell_2 == 'FALSE') {myNewCell3.style.backgroundColor = 'green'}
+        if (data.features[i].properties.Clamshell_3 == 'TRUE') {myNewCell4.style.backgroundColor = 'red'}
+        if (data.features[i].properties.Clamshell_3 == 'FALSE') {myNewCell4.style.backgroundColor = 'green'}
+        myNewRow.append(myNewCell1)
+        myNewRow.append(myNewCell2)
+        myNewRow.append(myNewCell3)
+        myNewRow.append(myNewCell4)
+        x.append(myNewRow)
+    }
+
+</script>
+</html>
