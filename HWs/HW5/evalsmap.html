@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart Evals</title>
+    <script type="text/javascript"
+    src="addresspoints.js">
+    </script>
+</head>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+
+<script src="addresspoints.js"></script>
+    <style>
+        h1 {
+        font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+        font-size: 36px;
+        position: relative;
+        top: 10%;
+        text-align: center;
+        outline-style: ridge;
+        -webkit-text-stroke-width: 1px;
+        }
+        h2 { font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;  }
+        h3 { font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; }
+        .legend {
+            line-height: 18px;
+            color: #000;
+            background-color: #ffffff;
+        }
+        .legend i {
+            width: 18px;
+            height: 18px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.7; 
+        }
+        #map { height: 600px; width: 800px ;
+            background-color:darkseagreen;
+            text-align: center; 
+        }
+   
+
+
+.slider {
+    width: 550px; 
+}
+
+.tick-container {
+    display: flex;
+    justify-content: space-between;
+    width: 550px;
+    margin-top: 5px;
+}
+
+.tick {
+    font-size: 12px; 
+    color: #888; 
+}
+
+
+</style>
+
+<body>
+    <h1>Residential Recycling Cart Evaluation Ratings</h1>
+    <h2>Move the slider below to display household cart ratings given after each evaluation.</h2> <br>
+    <h3>Green indicates that the household received a Star rating.<br>
+    Yellow indicates that the household received a Light rating.<br>
+    Red indicates that the household received an Oops rating.<br>
+    Gray indicates that the cart was not evaluated.</h3>
+
+    <div class="slider-container">
+      <input type="range" min="11/18/2022" max="12/9/2022" value="2" class="slider" id="slider" oninput='f()'>
+          <div class="tick-container">
+              <span class="tick">11/18/2022</span>
+              <span class="tick">12/2/2022</span>
+              <span class="tick">12/9/2022</span>
+          </div>
+      </div>
+  
+    <div id="map"></div>
+    <script>
+        
+        var map = L.map('map').setView([35.93500000, -79.09194828], 15);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+//
+
+    
+
+
+function Color(daLetter) {
+    if (daLetter == "S") {return 'green'}
+    if (daLetter == "L") {return 'yellow'}
+    if (daLetter == "O") {return 'red'}
+    if (daLetter == "N") {return 'gray'}
+         };
+        
+function myStyle(feature) {
+
+    var greencircle = {
+    radius: 5,
+    fillColor: Color(feature.properties["11/18/22"]),
+    color: "green",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+}
+return greencircle
+};
+
+   
+L.geoJSON(addresspoints, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, myStyle(feature));
+    }
+}).addTo(map);
+
+
+
+
+ // var layerGroup = L.layerGroup().addTo(map);
+//function f() {
+   //         layerGroup.clearLayers();
+  //          var slider = document.getElementById('slider');
+   //         var sliderDate = slider.value;
+   //         for (var i=0; i < addresspoints.features.length; i++){
+     //           var changeDate = addresspoints.features[i].properties.Visit1Date
+       //         var boundary = addresspoints.features[i].geometry.coordinates
+         //       if (changeDate >= sliderDate) {
+           //         var nextTract = L.polygon(boundary, {color: 'green', fillColor: 'green', fillOpacity: 0.5}).addTo(layerGroup);
+             //       AfAmOwned = AfAmOwned + 1;
+               //     }
+            //    if (changeDate < sliderDate) {
+              //      var nextTract = L.polygon(boundary, {color: 'red', fillColor: 'red', fillOpacity: 0.5}).addTo(layerGroup);
+                //    }
+               // }}
+
+        
+        var EvalDate = "11/18/22"
+        
+
+          
+
+    
+      //  var cartevals = L.geojson(addresspoints, {style: myStyle}).addTo(map);
+
+
+
+        function moveSlider(value) { 
+            map.removeLayer(addresspoints);
+            document.getElementById('11/18/22').innerHTML = 'Day ' + value
+           // geojson = L.geoJSON(addresspoints,{
+            //   pointToLayer: function(feature,latlng){
+             //       return circleMarker(latlng, Color)
+           //    }
+           // })
+            map.addLayer(geojson); // add the new layer
+            
+        }
+        moveSlider(0) // start the map with the first feature
+        window.onload = function() {
+        document.getElementById('dateSlider').value = 0;  
+    }; // I added this section to make sure that the slider goes back to the first date after refreshing
+
+    
+
+
+
+
+</script>
+ </body>
+
+</html>
