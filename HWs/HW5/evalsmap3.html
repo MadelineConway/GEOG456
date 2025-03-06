@@ -3,7 +3,7 @@ DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cart Evals</title>
+    <title>Cart Evals 3</title>
     <script type="text/javascript"
     src="data.js">
     </script>
@@ -80,7 +80,7 @@ DOCTYPE html>
    
 
     <div class="slider-container">
-    <input id="dateSlider" type="range" name="Day" min="11/18/2022" max="01/27/2023" class="slider" oninput="f()">
+    <input id="slider" type="range" name="Day" min="11/18/2022" max="01/27/2023" class="slider" oninput="f()">
           <div class="tick-container">
               <span class="tick">11/18/2022</span>
               <span class="tick">12/2/2022</span>
@@ -127,7 +127,15 @@ var geojson = L.geoJSON(data, {
     
 function f() {
     layerGroup.clearLayers();
-    var dateSlider = document.getElementById()
+    var dateSlider = document.getElementById('slider');
+    var sliderDate = slider.value;
+    for (var i=0; i < 113; i++){
+        var changeDate = data[0].features[i].properties.Visit2Date
+        var location = data[0].features[i].geometry.coordinates
+        if (changeDate ) {
+
+        }
+    }
 }
 
 function moveSlider(value) { 

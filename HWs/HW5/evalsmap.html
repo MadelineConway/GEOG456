@@ -80,12 +80,12 @@
    
 
     <div class="slider-container">
-    <input type="range" name="date" min="11/18/2022" max="01/27/2023" value="11/18/2022" class="slider" id="slider" oninput='moveSlider(this.value)'>
+    <input type="range" name="date" min="0" max="3" value="0" class="slider" id="slider" oninput='moveSlider(this.value)'>
           <div class="tick-container">
-              <span class="tick">11/18/2022</span>
-              <span class="tick">12/2/2022</span>
-              <span class="tick">12/9/2022</span>
-              <span class="tick">01/27/2023</span>
+              <span class="tick">11/18/22</span>
+              <span class="tick">12/2/22</span>
+              <span class="tick">12/9/22</span>
+              <span class="tick">1/27/23</span>
           </div>
       </div>
   
@@ -98,6 +98,7 @@
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
 
+        myDates = ["11/18/22", "12/2/22", "12/9/22", "1/27/23"  ]
     
 function Color(daLetter) {
     if (daLetter == "S") {return 'green'}
@@ -106,11 +107,13 @@ function Color(daLetter) {
     if (daLetter == "N") {return 'gray'}
          };
         
+var EvalDate = myDates[0]
+
 function myStyle(feature) {
 
     var greencircle = {
     radius: 5,
-    fillColor: Color(feature.properties["11/18/22"]),
+    fillColor: Color(feature.properties[EvalDate]),
     color: "green",
     weight: 1,
     opacity: 1,
@@ -119,21 +122,20 @@ function myStyle(feature) {
 return greencircle
 };
 
+
    
-L.geoJSON(addresspoints, {
+var geojson = L.geoJSON(addresspoints, {
     pointToLayer: function (feature, latlng) {
         return L.circleMarker(latlng, myStyle(feature));
     }
 }).addTo(map);
 
 
-        
-       
-
 
         function moveSlider(value) { 
-            map.removeLayer(addresspoints);
-            document.getElementById('daYear').innerHTML = 'Day ' + value
+            EvalDate = myDates[value]
+            map.removeLayer(geojson);
+            document.getElementById('daYear').innerHTML = 'Evaluation ' + value
             geojson = L.geoJSON(addresspoints,{
               pointToLayer: function(feature,latlng){
                   return L.circleMarker(latlng, myStyle(feature))
