@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cart Evals</title>
     <script type="text/javascript"
-    src="addresspoints.js">
+    src="data.js">
     </script>
 </head>
 
@@ -17,7 +17,7 @@
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
 
-<script src="addresspoints.js"></script>
+<script src="data.js"></script>
     <style>
         h1 {
         font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
@@ -58,6 +58,7 @@
     justify-content: space-between;
     width: 550px;
     margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .tick {
@@ -76,11 +77,10 @@
     Red indicates that the household received an Oops rating.<br>
     Gray indicates that the cart was not evaluated.</h3>
     <h3 id = "daYear">Evaluation Date: 11/18/22</h3>
-
    
 
     <div class="slider-container">
-    <input type="range" name="date" min="11/18/2022" max="01/27/2023" value="11/18/2022" class="slider" id="slider" oninput='moveSlider(this.value)'>
+    <input id="dateSlider" type="range" name="Day" min="11/18/2022" max="01/27/2023" class="slider" oninput="f()">
           <div class="tick-container">
               <span class="tick">11/18/2022</span>
               <span class="tick">12/2/2022</span>
@@ -96,75 +96,55 @@
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
+        }).addTo(map); 
+     
+    var layerGroup = L.layerGroup().addTo(map);
 
-    
+var VisitDate = "11/18/2022"
+
+function myStyle(feature) {
+    return {
+    radius: 5,
+    fillColor: Color(data.features[i].properties.Visit1),
+    color: "green",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+}};
+
 function Color(daLetter) {
     if (daLetter == "S") {return 'green'}
     if (daLetter == "L") {return 'yellow'}
     if (daLetter == "O") {return 'red'}
     if (daLetter == "N") {return 'gray'}
-         };
-        
-function myStyle(feature) {
+ };
 
-    var greencircle = {
-    radius: 5,
-    fillColor: Color(feature.properties["11/18/22"]),
-    color: "green",
-    weight: 1,
-    opacity: 1,
-    fillOpacity: 0.8
-}
-return greencircle
-};
 
-   
-L.geoJSON(addresspoints, {
+var geojson = L.geoJSON(data, {
     pointToLayer: function (feature, latlng) {
         return L.circleMarker(latlng, myStyle(feature));
-    }
-}).addTo(map);
-
-
-
-
- // var layerGroup = L.layerGroup().addTo(map);
-//function f() {
-   //         layerGroup.clearLayers();
-  //          var slider = document.getElementById('slider');
-   //         var sliderDate = slider.value;
-   //         for (var i=0; i < addresspoints.features.length; i++){
-     //           var changeDate = addresspoints.features[i].properties.Visit1Date
-       //         var boundary = addresspoints.features[i].geometry.coordinates
-         //       if (changeDate >= sliderDate) {
-           //         var nextTract = L.polygon(boundary, {color: 'green', fillColor: 'green', fillOpacity: 0.5}).addTo(layerGroup);
-             //       AfAmOwned = AfAmOwned + 1;
-               //     }
-            //    if (changeDate < sliderDate) {
-              //      var nextTract = L.polygon(boundary, {color: 'red', fillColor: 'red', fillOpacity: 0.5}).addTo(layerGroup);
-                //    }
-               // }}
-
-        
-        var EvalDate = "11/18/22"
+    }}).addTo(map);
     
-      //  var cartevals = L.geojson(addresspoints, {style: myStyle}).addTo(map);
+function f() {
+    layerGroup.clearLayers();
+    var dateSlider = document.getElementById()
+}
 
-
-
-        function moveSlider(value) { 
-            map.removeLayer(addresspoints);
-            document.getElementById('daYear').innerHTML = 'Day ' + value
-            geojson = L.geoJSON(addresspoints,{
-              pointToLayer: function(feature,latlng){
-                  return L.circleMarker(latlng, myStyle(feature))
+function moveSlider(value) { 
+    VisitDate = value;
+    map.removeLayer(geojson);
+    document.getElementById('daYear').innerHTML = 'Day ' + value
+    geojson = L.geoJSON(data.features[value] ,{
+    pointToLayer: function(feature,latlng){
+    return L.circleMarker(latlng, myStyle(feature))
               }
-            })
-            map.addLayer(geojson); // add the new layer
+          })
+          map.addLayer(geojson); 
             
         }
-        moveSlider(0) // start the map with the first feature
+moveSlider('11/18/2022')
+
+        moveSlider(0) 
         window.onload = function() {
         document.getElementById('slider').value = 0;  
     }; // I added this section to make sure that the slider goes back to the first date after refreshing
