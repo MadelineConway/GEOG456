@@ -19,17 +19,6 @@
 
 <script src="addresspoints.js"></script>
     <style>
-        h1 {
-        font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
-        font-size: 36px;
-        position: relative;
-        top: 10%;
-        text-align: center;
-        outline-style: ridge;
-        -webkit-text-stroke-width: 1px;
-        }
-        h2 { font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;  }
-        h3 { font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif; }
         .legend {
             line-height: 18px;
             color: #000;
@@ -69,8 +58,8 @@
 </style>
 
 <body>
-    <h1>Residential Recycling Cart Evaluation Ratings</h1>
-    <h2>Move the slider below to display household cart ratings given after each evaluation.</h2> <br>
+    <h1>Residential Recycling Cart Evaluation Ratings - Route: U-CH-Fri (1)</h1>
+    <h2>Move the slider below to display household cart ratings given after each evaluation.</h2>
     <h3>Green indicates that the household received a Star rating.<br>
     Yellow indicates that the household received a Light rating.<br>
     Red indicates that the household received an Oops rating.<br>
@@ -92,7 +81,8 @@
     <div id="map"></div>
     <script>
         
-        var map = L.map('map').setView([35.93500000, -79.09194828], 15);
+        var map = L.map('map').setView([35.93850000, -79.09315828], 16
+        );
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

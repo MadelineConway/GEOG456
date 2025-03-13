@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evals Map and Table</title>
+    <script type="text/javascript"
+    src="addpoints.js">
+    </script>
+</head>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+
+<script src="addpoints.js"></script>
+    <style>
+
+   
+#container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
+    #map { height: 600px;
+    width: 60% }
+   
+    .column {
+            width: 10%;
+            display: flex;
+            align-items: center; 
+            justify-content: center; 
+            background-color: gray;
+            border: 1px solid black;
+        }
+
+        table {
+  font-family: arial, sans-serif;
+  font-size: 10px;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+        td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+        tr:nth-child(even) {
+   background-color: #ffffff;
+}
+
+        tr.selected {
+   background-color:fuchsia ;
+}
+        
+
+        .legend {
+            line-height: 18px;
+            color: #000;
+            background-color: #ffffff;
+        }
+        .legend i {
+            width: 18px;
+            height: 18px;
+            float: left;
+            margin-right: 8px;
+            opacity: 0.7; 
+        }
+     
+
+.slider {
+    width: 550px; 
+}
+
+.tick-container {
+    display: flex;
+    justify-content: space-between;
+    width: 550px;
+    margin-top: 5px;
+}
+
+.tick {
+    font-size: 12px; 
+    color: #888; 
+}
+
+
+
+</style>
+
+<body>
+    <h1>Residential Recycling Cart Evaluation Ratings - Route: U-CH-Fri (1)</h1>
+    <h2>Move the slider below to display household cart ratings given after each evaluation.</h2>
+    <h3>Green indicates that the household received a Star (S) rating, 
+        yellow indicates a Light (L) rating, 
+        red indicates an Oops (O) rating,
+        white indicates that the cart was not put out for collection (N),
+        and blue indicates that the household was only then given the introductory letter regarding the program (I).</h3>
+    <h3 id = "daYear">Evaluation Date: 11/18/22</h3>
+    <div class="slider-container">
+        <input type="range" name="date" min="0" max="3" value="0" class="slider" id="slider" oninput='moveSlider(this.value)'>
+              <div class="tick-container">
+                  <span class="tick">11/18/22</span>
+                  <span class="tick">12/2/22</span>
+                  <span class="tick">12/9/22</span>
+                  <span class="tick">1/27/23</span>
+              </div>
+          </div>
+    <div id="container">
+        <div id="map" 
+        class="leaflet-container leaflet-touch leaflet-retina leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom" tabindex="0" style="position: relative;"><div class="leaflet-pane leaflet-map-pane" style="transform: translate3d(0px, 0px, 0px);"><div class="leaflet-pane leaflet-tile-pane"><div class="leaflet-layer " style="z-index: 1; opacity: 0.5;"><div class="leaflet-tile-container leaflet-zoom-animated" style="z-index: 19; transform: translate3d(0px, 0px, 0px) scale(1);"><img alt="" src="https://tile.openstreetmap.org/8/72/100.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(233px, 27px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/8/72/99.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(233px, -229px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/8/71/100.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-23px, 27px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/8/73/100.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(489px, 27px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/8/72/101.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(233px, 283px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/8/71/99.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-23px, -229px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/8/73/99.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(489px, -229px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/8/71/101.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(-23px, 283px, 0px); opacity: 1;"><img alt="" src="https://tile.openstreetmap.org/8/73/101.png" class="leaflet-tile leaflet-tile-loaded" style="width: 256px; height: 256px; transform: translate3d(489px, 283px, 0px); opacity: 1;"></div></div></div><div class="leaflet-pane leaflet-overlay-pane"><svg pointer-events="none" class="leaflet-zoom-animated" width="646" height="420" viewBox="-54 -35 646 420" style="transform: translate3d(-54px, -35px, 0px);"><g><path class="leaflet-interactive" stroke="white" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="pink" fill-opacity="0.7" fill-rule="evenodd" d="M205 192L188 250L241 270L284 228L299 220L323 203L314 185L306 182L305 178L298 176L292 168L245 145L233 146L233 155L239 155L242 159L239 171L231 180L223 178L218 192z"></path><path class="leaflet-interactive" stroke="white" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="pink" fill-opacity="0.7" fill-rule="evenodd" d="M-1 104L-3 180L89 185L91 108z"></path><path class="leaflet-interactive" stroke="white" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="pink" fill-opacity="0.7" fill-rule="evenodd" d="M184 193L218 192L223 178L231 180L239 171L242 159L239 155L233 155L233 146L228 146L223 141L224 109L196 108z"></path><path class="leaflet-interactive" stroke="white" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="pink" fill-opacity="0.7" fill-rule="evenodd" d="M241 270L249 275L251 280L255 283L259 289L261 296L265 299L267 305L273 311L271 316L280 327L295 329L314 322L317 316L321 313L326 314L330 311L342 308L340 304L341 293L358 255L347 251L340 230L340 226L330 221L324 213L325 209L323 203L299 220L284 228L275 237z"></path><path class="leaflet-interactive" stroke="white" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="pink" fill-opacity="0.7" fill-rule="evenodd" d="M89 185L89 197L144 197L139 183L141 107L91 106L91 108z"></path><path class="leaflet-interactive" stroke="white" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="pink" fill-opacity="0.7" fill-rule="evenodd" d="M-3 180L-7 273L86 271L89 185z"></path><path class="leaflet-interactive" stroke="white" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="pink" fill-opacity="0.7" fill-rule="evenodd" d="M141 107L139 183L142 190L184 193L196 108L160 107z"></path><path class="leaflet-interactive" stroke="white" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="pink" fill-opacity="0.7" fill-rule="evenodd" d="M323 203L325 209L324 213L330 221L335 223L388 197L392 196L398 199L411 160L423 136L425 128L420 130L415 127L409 130L395 128L390 130L384 121L373 122L368 116L338 172z"></path><path class="leaflet-interactive" stroke="white" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="pink" fill-opacity="0.7" fill-rule="evenodd" d="M94 40L0 40L-1 104L91 108L93 62z"></path><path class="leaflet-interactive" stroke="white" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="pink" fill-opacity="0.7" fill-rule="evenodd" d="M401 192L398 199L392 196L388 197L335 223L340 226L340 230L347 251L358 255L359 252L370 255L406 255L431 235L420 223L415 201z"></path><path class="leaflet-interactive" stroke="white" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="pink" fill-opacity="0.7" fill-rule="evenodd" d="M89 197L86 271L124 270L135 265L137 267L143 262L143 259L151 261L151 257L159 251L160 248L166 246L175 250L183 263L190 266L193 269L203 256L188 250L205 192L173 193L142 190L144 197z"></path><path class="leaflet-interactive" stroke="white" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="pink" fill-opacity="0.7" fill-rule="evenodd" d="M279 123L270 144L270 157L292 168L298 176L305 178L306 182L314 185L323 203L368 116L361 113L350 115L345 107L338 104L333 105L314 102L308 109L301 109L295 124L286 125z"></path><path class="leaflet-interactive" stroke="white" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="pink" fill-opacity="0.7" fill-rule="evenodd" d="M224 109L223 141L228 146L245 145L270 157L270 144L279 123L277 121L276 60L279 46L286 42L286 40L225 40L225 43z"></path><path class="leaflet-interactive" stroke="white" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="pink" fill-opacity="0.7" fill-rule="evenodd" d="M425 128L423 136L411 160L401 192L415 201L420 223L431 235L458 216L466 207L474 206L477 201L481 200L488 203L489 183L478 161L465 154L455 153L455 146L453 140L450 141L438 137L436 132z"></path><path class="leaflet-interactive" stroke="white" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="pink" fill-opacity="0.7" fill-rule="evenodd" d="M368 116L373 122L384 121L390 130L395 128L409 130L415 127L420 130L425 128L436 132L438 137L450 141L453 140L455 146L455 153L465 154L478 161L495 142L503 140L506 136L503 126L498 124L496 125L492 119L488 119L482 115L482 106L477 101L472 89L456 93L450 93L445 87L446 82L452 76L452 71L438 61L434 53L410 53L403 49L388 48L386 55L386 76L380 95z"></path><path class="leaflet-interactive" stroke="white" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="pink" fill-opacity="0.7" fill-rule="evenodd" d="M286 40L286 42L279 46L276 60L277 121L279 123L286 125L295 124L301 109L308 109L319 93L311 39z"></path><path class="leaflet-interactive" stroke="white" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="pink" fill-opacity="0.7" fill-rule="evenodd" d="M162 40L160 107L224 109L225 40z"></path><path class="leaflet-interactive" stroke="white" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="pink" fill-opacity="0.7" fill-rule="evenodd" d="M94 40L91 106L141 107L160 107L162 40z"></path><path class="leaflet-interactive" stroke="white" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="pink" fill-opacity="0.7" fill-rule="evenodd" d="M388 39L388 48L403 49L410 53L434 53L438 61L452 71L452 76L446 82L445 87L450 93L456 93L472 89L477 101L482 106L482 115L488 119L492 119L496 125L498 124L497 115L510 113L517 97L528 63L527 59L530 55L535 56L540 50L536 46L524 43L521 38L415 39z"></path><path class="leaflet-interactive" stroke="white" stroke-opacity="1" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="pink" fill-opacity="0.7" fill-rule="evenodd" d="M311 39L319 93L314 102L333 105L338 104L345 107L350 115L361 113L368 116L380 95L386 76L386 55L388 48L388 39z"></path></g></svg></div><div class="leaflet-pane leaflet-shadow-pane"></div><div class="leaflet-pane leaflet-marker-pane"></div><div class="leaflet-pane leaflet-tooltip-pane"></div><div class="leaflet-pane leaflet-popup-pane"></div><div class="leaflet-proxy leaflet-zoom-animated" style="transform: translate3d(18468px, 25748px, 0px) scale(128);"></div></div><div class="leaflet-control-container"><div class="leaflet-top leaflet-left"><div class="leaflet-control-zoom leaflet-bar leaflet-control"><a class="leaflet-control-zoom-in" href="#" title="Zoom in" role="button" aria-label="Zoom in" aria-disabled="false"><span aria-hidden="true">+</span></a><a class="leaflet-control-zoom-out" href="#" title="Zoom out" role="button" aria-label="Zoom out" aria-disabled="false"><span aria-hidden="true">−</span></a></div></div><div class="leaflet-top leaflet-right"></div><div class="leaflet-bottom leaflet-left"></div><div class="leaflet-bottom leaflet-right"></div></div></div>
+     
+         <div id="info">
+             <table id="evalstable">
+        <tr>
+          <th>Address</th>
+          <th>1st evaluation - 11/18/2022</th>
+          <th>2nd evaluation - 12/2/2022</th>
+          <th>3rd evaluation - 12/9/2022</th>
+          <th>4th evaluation - 1/27/2023</th>
+        </tr>
+      </table>
+    </div>
+      
+  
+      <script>
+
+
+
+          var x = document.getElementById('evalstable')
+        
+
+          
+          for (var i = 0; i < addpoints.features.length; i++){
+              var myNewRow = document.createElement('tr');
+              var myNewCell1 = document.createElement('td');
+              var myNewCell2 = document.createElement('td');
+              var myNewCell3 = document.createElement('td');
+              var myNewCell4 = document.createElement('td');
+              var myNewCell5 = document.createElement('td');
+              myNewCell1.innerText = addpoints.features[i].properties.Add_st;
+              myNewCell2.innerText = addpoints.features[i].properties["11/18/22"];
+              myNewCell3.innerText = addpoints.features[i].properties["12/2/22"];
+              myNewCell4.innerText = addpoints.features[i].properties["12/9/22"];
+              myNewCell5.innerText = addpoints.features[i].properties["1/27/23"];
+      
+              if (addpoints.features[i].properties["11/18/22"] == 'S') {myNewCell2.style.backgroundColor = 'green'}
+              if (addpoints.features[i].properties["11/18/22"] == 'L') {myNewCell2.style.backgroundColor = 'yellow'}
+              if (addpoints.features[i].properties["11/18/22"] == 'O') {myNewCell2.style.backgroundColor = 'red'}
+              if (addpoints.features[i].properties["11/18/22"] == 'N') {myNewCell2.style.backgroundColor = 'lightgray'}
+              if (addpoints.features[i].properties["11/18/22"] == 'I') {myNewCell2.style.backgroundColor = 'skyblue'}
+              if (addpoints.features[i].properties["12/2/22"] == 'S') {myNewCell3.style.backgroundColor = 'green'}
+              if (addpoints.features[i].properties["12/2/22"] == 'L') {myNewCell3.style.backgroundColor = 'yellow'}
+              if (addpoints.features[i].properties["12/2/22"] == 'O') {myNewCell3.style.backgroundColor = 'red'}
+              if (addpoints.features[i].properties["12/2/22"] == 'N') {myNewCell3.style.backgroundColor = 'lightgray'}
+              if (addpoints.features[i].properties["12/2/22"] == 'I') {myNewCell3.style.backgroundColor = 'skyblue'}
+              if (addpoints.features[i].properties["12/9/22"] == 'S') {myNewCell4.style.backgroundColor = 'green'}
+              if (addpoints.features[i].properties["12/9/22"] == 'L') {myNewCell4.style.backgroundColor = 'yellow'}
+              if (addpoints.features[i].properties["12/9/22"] == 'O') {myNewCell4.style.backgroundColor = 'red'}
+              if (addpoints.features[i].properties["12/9/22"] == 'N') {myNewCell4.style.backgroundColor = 'lightgray'}
+              if (addpoints.features[i].properties["12/9/22"] == 'I') {myNewCell4.style.backgroundColor = 'skyblue'}
+              if (addpoints.features[i].properties["1/27/23"] == 'S') {myNewCell5.style.backgroundColor = 'green'}
+              if (addpoints.features[i].properties["1/27/23"] == 'L') {myNewCell5.style.backgroundColor = 'yellow'}
+              if (addpoints.features[i].properties["1/27/23"] == 'O') {myNewCell5.style.backgroundColor = 'red'}
+              if (addpoints.features[i].properties["1/27/23"] == 'N') {myNewCell5.style.backgroundColor = 'lightgray'}
+              if (addpoints.features[i].properties["1/27/23"] == 'I') {myNewCell5.style.backgroundColor = 'skyblue'}
+              myNewRow.append(myNewCell1)
+              myNewRow.append(myNewCell2)
+              myNewRow.append(myNewCell3)
+              myNewRow.append(myNewCell4)
+              myNewRow.append(myNewCell5)
+              x.append(myNewRow)
+            }
+      
+        
+        var map = L.map('map').setView([35.93850000, -79.09315828], 16
+        );
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        myDates = ["11/18/22", "12/2/22", "12/9/22", "1/27/23"  ]
+    
+function Color(daLetter) {
+    if (daLetter == "S") {return 'green'}
+    if (daLetter == "L") {return 'yellow'}
+    if (daLetter == "O") {return 'red'}
+    if (daLetter == "N") {return 'lightgray'}
+    if (daLetter == "I") {return 'skyblue'}
+         };
+        
+var EvalDate = myDates[0]
+
+function myStyle(feature) {
+
+    var greencircle = {
+    radius: 5,
+    fillColor: Color(feature.properties[EvalDate]),
+    color: "green",
+    weight: 1,
+    opacity: 1,
+    fillOpacity: 0.8
+}
+return greencircle
+};
+
+
+
+   
+var geojson = L.geoJSON(addpoints, {
+    pointToLayer: function (feature, latlng) {
+        return L.circleMarker(latlng, myStyle(feature));
+    }},
+).addTo(map);
+  
+
+
+
+        function moveSlider(value) { 
+            EvalDate = myDates[value]
+            map.removeLayer(geojson);
+            document.getElementById('daYear').innerHTML = 'Evaluation ' + value
+            geojson = L.geoJSON(addpoints,{
+              pointToLayer: function(feature,latlng){
+                  return L.circleMarker(latlng, myStyle(feature))
+              }
+            })
+            map.addLayer(geojson); // add the new layer
+            
+        }
+        moveSlider(0) // start the map with the first feature
+        window.onload = function() {
+        document.getElementById('slider').value = 0;  
+    }; // I added this section to make sure that the slider goes back to the first date after refreshing
+
+  
+
+
+
+</script>
+ </body>
+
+</html>
