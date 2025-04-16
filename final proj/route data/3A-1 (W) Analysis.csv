@@ -1,0 +1,12 @@
+Visit 1 (7/13/22),Count,,,Visit 2 (7/27/22),Count,,Visit 3 (8-10-22),Count,,Visit 4 (8-24-22),Count
+S,44,,,N,52,,S,59,,S,63
+L,32,,,S,43,,N,45,,N,41
+N,32,,,L,23,,L,18,,O,19
+O,28,,,O,18,,O,12,,L,11
+Grand Total,136,,,Grand Total,136,,Grand Total,134,,Grand Total,134
+,,,,,,,,,,,
+Visit 1 (7-13-22),Count,,,Visit 2 (7-27-22),Count,,Visit 3 (8-10-22),Count,,Visit 4 (8-24-22),Count
+S,44,,,S,43,,S,59,,S,63
+L,32,,,L,23,,L,18,,O,19
+O,28,,,O,18,,O,12,,L,11
+Grand Total,104,,,Grand Total,84,,Grand Total,89,,Grand Total,93

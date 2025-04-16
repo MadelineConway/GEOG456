@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recycling Stars Program</title>
+    <script type="text/javascript"
+    src="aggregated_route_data.js">
+    </script>
+</head>
+
+<link rel="stylesheet" href="https:unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+
+<script src="https:unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+
+<script src="aggregated_route_data.js"></script>
+
+<style>
+      body {background-color:cornflowerblue;}
+      #titleBox {
+        position: absolute;
+        top: 5%;
+        width: 700px;
+        height: 80px;
+        background-color: white;
+        border: 6px solid blue;
+      }
+      #textBox {
+        position: absolute;
+        width: 400px;
+        height: 300px;
+        background-color: white;
+        right: 5%;
+        top: 30%;
+      }
+      
+      h1 {
+        color:midnightblue;
+        
+        position: absolute;
+        text-align: center;
+        left: 5%;
+        top: 2%;
+      }
+
+</style>
+
+<body>
+   
+    <div id="titleBox">
+            <h1>
+                Orange County NC Recycling Stars Program 
+            </h1>
+    </div>
+    <div id="textBox">
+    </div>
+    <div id="map">
+    </div>
+   
+      
+    <script src="aggregated_route_data.js"></script>
+    <style>
+        #map {
+        width: 700px; 
+        height: 700px;
+        position: absolute;
+        top: 20%;
+    }
+    </style>
+
+<script>
+ var map = L.map('map').setView([36.011659, -79.113007], 11
+        );
+
+        L.tileLayer('https:{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https:www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+  
+
+
+        const colors = ['#4daf4a', '#FFDE21', '#FF0000'] 
+
+
+        function createDoughnutSVG(values) {
+            const total = values.reduce((a, b) => a + b, 0);
+         let startAngle = 270;
+         let paths = '';
+
+         const outerR = 25;
+         const innerR = 15;
+
+            for (let i=0; i<values.length; i++) {
+                var val = values [i];
+                var angle = (val/total) * 360;
+               const endAngle = startAngle + angle;
+       const largeArc = angle > 180 ? 1:0;
+
+                const x1 = 25 + outerR * Math.cos(Math.PI * startAngle/180);
+                const y1 = 25 + outerR * Math.sin(Math.PI * startAngle / 180);
+                const x2 = 25 + outerR * Math.cos(Math.PI * endAngle / 180);
+                const y2 = 25 + outerR * Math.sin(Math.PI * endAngle / 180);
+                const x3 = 25 + innerR * Math.cos(Math.PI * endAngle/180);
+                const y3 = 25 + innerR * Math.sin(Math.PI * endAngle / 180);
+                const x4 = 25 + innerR * Math.cos(Math.PI * startAngle/180);
+                const y4 = 25 + innerR * Math.sin(Math.PI * startAngle / 180);
+
+                paths += `<path d="
+                M ${x1}, ${y1}
+                A ${outerR}, ${outerR} 0 ${largeArc},1 ${x2},${y2}
+                L ${x3},${y3}
+                A ${innerR},${innerR} 0 ${largeArc},0 ${x4},${y4}
+                Z
+            " fill="${colors[i]}" />
+            `;
+               
+                startAngle = endAngle;
+          }
+           return `
+                <svg width="50" height="50" viewBox="0 0 50 50" class="doughnut-icon">
+            ${paths}
+            <!-- Inner white circle and center label -->
+            <circle cx="25" cy="25" r="${innerR}" fill="white"/>
+            <text x="25" y="29" font-size="10" text-anchor="middle" fill="black">${values[0]}%</text>
+            <!-- Borders -->
+            <circle cx="25" cy="25" r="${outerR}" fill="none" stroke="black" stroke-width="0.5" />
+            <circle cx="25" cy="25" r="${innerR}" fill="none" stroke="black" stroke-width="0.5" />
+            </svg>
+            `;
+      }
+        
+        const data = [
+            {name: '4B-1', coords: [35.95143398, -79.17357477], values: [49, 23, 28]},
+            {name: '1C-1', coords: [36.02893776, -79.2107417], values: [46, 26, 28]},
+            {name: '3A-1', coords: [35.88593955, -79.03504011], values: [58, 23, 19]},
+            {name: '3C-1', coords: [35.86677541, -79.12532124], values: [55, 25, 20]},
+            {name: '6A-1', coords: [36.10192893, -79.14953301], values: [54, 25, 21]},
+            {name: '2C-1', coords: [35.97509278, -79.23125584], values: [39, 31, 30]},
+            {name: '5B-1', coords: [35.9915711, -79.06211275], values: [52, 18, 14]},
+            {name: '3B-2', coords: [35.86595468, -79.09092344], values: [63, 22, 14]},
+            {name: '7C-2', coords: [36.18951002, -79.07520116], values: [49, 24, 27]},
+            {name: '9A-1', coords: [36.09212709, -79.08513749], values: [57, 21, 22]},
+            {name: 'U-CH-Tues(1)', coords: [35.91453005, -79.0333328], values: [43, 19, 38]},
+            {name: '4C-1', coords: [35.9230388, -79.21462197], values: [55, 44, 22]},
+            {name: 'U-HI-Wed(3)', coords: [36.08405627, -79.10545401], values: [43, 24, 33]},
+            {name: 'U-CH-Fri(3)', coords: [35.91328464, -79.07573826], values: [53, 26, 21]},
+            {name: 'U-CH-Mon(3)', coords: [35.9634208, -79.05119307], values: [54, 26, 20]},
+            {name: 'U-CH-Thurs(2)', coords: [35.89017266, -79.06498129], values: [39, 26, 35]},
+            {name: 'U-CH-Mon(2)', coords: [35.94289721, -79.03046784], values: [43, 21, 36]},
+            {name: '7C-1', coords: [36.17609649, -79.1315621], values: [42, 22, 36]},
+            {name: 'U-HI-Wed(2)', coords: [36.0516081, -79.11024365], values: [33, 20, 47]},
+            {name: 'U-CH-Fri(2)', coords: [35.93985619, -79.09086574], values: [44, 21, 35]},
+            {name: 'U-CH-Thurs(1)', coords: [35.89737436, -79.0598842], values: [32, 20, 48]},
+            {name: '5C-1', coords: [35.94404528, -79.13207801], values: [63, 25, 12]},
+            {name: '2B-1', coords: [36.027565, -79.13304281], values: [53, 27, 20]},
+            {name: 'U-HI-Wed(4)', coords: [36.08306193, -79.10132072], values: [48, 16, 36]},
+            {name: '10A-1', coords: [35.99483496, -79.00774308], values: [60, 26, 14]},
+            {name: 'U-CH-Mon(4)', coords: [35.93750006, -79.03766254], values: [56, 22, 22]},
+            {name: 'U-CH-Tues(2)', coords: [35.92865805, -79.00600357], values: [35, 38, 27]},
+            {name: '9B-3', coords: [36.09449126, -79.07081509], values: [54, 25, 21]},
+            {name: '8A-1', coords: [36.09777493, -79.04424449], values: [64, 19, 17]},
+            {name: 'U-CH-Fri(4)', coords: [35.92821163, -79.09286256], values: [65, 22, 13]},
+            {name: '3B-1', coords: [35.86706643, -79.08259132], values: [70, 21, 9]},
+            {name: 'U-CH-Thurs(3)', coords: [35.8923986, -79.03667697], values: [51, 25, 24]},
+            {name: 'U-CH-Fri(5)', coords: [35.93594955, -79.09321841], values: [66, 20, 14]},
+            {name: '6B-1', coords: [36.13620504, -79.21474292], values: [60, 20, 20]},
+            {name: 'U-CH-Tues(3)', coords: [35.91896431, -79.03667537], values: [51, 14, 35]},
+            {name: 'U-HI-Wed(5)', coords: [36.08007735, -79.11266547], values: [55, 16, 29]},
+            {name: '4A-1', coords: [35.91119694, -79.11967489], values: [57, 21, 22]},
+            {name: 'U-CH-Mon(5)', coords: [35.93226202, -79.04833913], values: [69, 15, 16]},
+            {name: 'U-CH-Thurs(4)', coords: [35.89992357, -79.07957095], values: [68, 18, 14]},
+            {name: 'U-HI-Wed(6)', coords: [36.04475648, -79.10478478], values: [59, 16, 25]},
+            {name: 'U-CH-Fri(6)', coords: [35.90987909, -79.0872522], values: [44, 28, 28]},
+            {name: 'U-CH-Mon(6)', coords: [35.96559117, -79.06934174], values: [52, 25, 23]},
+            {name: 'U-CH-Wed(1)', coords: [35.90789646, -79.06241212], values: [30, 21, 49]},
+            {name: 'U-CH-Tues(4)', coords: [35.91095866, -79.02306074], values: [46, 28, 26]},
+            {name: 'U-HI-Wed(1)', coords: [36.06233108, -79.11163067], values: [40, 18, 42]},
+            {name: 'U-CH-Mon(1)', coords: [35.93799707, -79.0318944], values: [39, 20, 41]},
+            {name: 'U-CH-Fri(1)', coords: [35.93912202, -79.09519828], values: [38, 24, 38]},
+            {name: '9B-2', coords: [36.08376401, -79.07827612], values: [46, 16, 38]},
+            {name: '9B-1', coords: [36.08657662, -79.07005818], values: [65, 14, 21]},
+            {name: '3A-2', coords: [35.88691448, -79.05446463], values: [55, 15, 30]},
+            
+
+
+        ];
+
+     data.forEach(loc => {
+         const icon = L.divIcon({
+            className: '',
+             html: createDoughnutSVG(loc.values),
+               iconSize: [50,50],
+                iconAnchor: [25,25]
+            });
+            L.marker(loc.coords, {icon}).addTo(map).bindPopup(loc.name);
+        });
+
+  
+
+
+</script>
+</body>
+</html>
