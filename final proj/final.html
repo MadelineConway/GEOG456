@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recycling Stars Program</title>
     <script type="text/javascript"
-    src="aggregated_route_data.js">
+    src="aggroutedata.js">
     </script>
 </head>
 
@@ -17,73 +17,144 @@
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
 
-<script src="aggregated_route_data.js"></script>
+<script src="aggroutedata.js"></script>
 
 <style>
       body {background-color:cornflowerblue;}
       #titleBox {
-        position: absolute;
+        margin: auto;
         top: 5%;
-        width: 700px;
-        height: 80px;
+        width: 1000px;
+        height: 4%;
+        padding: 25px;
+        text-align: center;
         background-color: white;
         border: 6px solid blue;
       }
       #textBox {
         position: absolute;
-        width: 400px;
-        height: 300px;
-        background-color: white;
-        right: 5%;
-        top: 30%;
+        width: 300px;
+        height: 400px;
+        right: 27%;
+        top: 50%;
       }
+      #outroBox {
+        position: absolute;
+        width: 650px;
+        height: 200px;
+        left: 2%;
+        top: 140%;
+    }
+
+    .graph {
+        position: absolute;
+        width: 610px;
+        height: 310px;
+        right: 3%;
+        top: 100%;
+        background-color: white;
+        border: 4px solid blue;
+    }
+      
       
       h1 {
         color:midnightblue;
-        
-        position: absolute;
         text-align: center;
+        margin: auto;
         left: 5%;
-        top: 2%;
+      }
+      h2 {
+        color: midnightblue;
+        text-align: center;
       }
 
+      p {
+        color: midnightblue;
+        position: absolute;
+        text-align: left;
+        margin-left: 15px;
+        margin-right: 15px;
+        top: 17%;
+        font-size: 115%;
+      }
+      #map {
+        width: 700px; 
+        height: 700px;
+        border: 4px solid blue;
+        position: absolute;
+        top: 55%;
+        left: 3%;
+    }
+
+    .star-image {
+        position: absolute;
+        width:230px; 
+        height: 230px; 
+        right: 65px; 
+        top: 500px;
+    }
 </style>
 
 <body>
-   
+ 
+    
     <div id="titleBox">
             <h1>
                 Orange County NC Recycling Stars Program 
             </h1>
     </div>
+<h2>About the Program</h2>
+    <p>
+        <br>
+        The Recycling Stars Program, led by the Orange County Solid Waste Department, is a county-wide public education project to improve residential recycling practices.
+        Through the program, a team of interns travels by van to residential areas within the county to evaluate the recycling bins of single-family homes that have been put out for collection that day.
+        Around 100-200 addresses are evaluated per day, categorized as routes, and each route is revisited a total of four times for evaluations. 
+        <br><br>During each evalutation, data is collected on each individual cart regarding how full it is, the contaminants found, and the rating it was given based on what was found in the cart.
+        "Star" ratings are given to carts that have no or minimal contaminants, "Light" ratings are given to the carts with five or more mild contaminants, and "Oops" ratings are given to carts containing severe contaminants such as plastic bags/wrap, lithium ion batteries, or hazardous waste.
+        After each cart is evaluated, a letter is attached providing the residents with a reminder about the program, information on which rating their cart receieved, and handwritten feedback describing the specific non-recyclable items that were found in their cart. 
+    </p>
+
     <div id="textBox">
+        <p>
+            The map on the left displays the total proportions of every rating received across all four evaluations for each completed route.
+            <br><br><span style="color: green;"><b>Green</b></span> represents Star ratings, <span style="color: rgb(226, 218, 2);"><b>Yellow</b></span> represents Light ratings, and <span style="color: red;"><b>Red</b></span> represents Oops ratings.<br><br>
+            Click on the buttons above the map to view the total percentages of each rating for all of the routes.
+        </p>
     </div>
+
+    <div id="outroBox">
+        <p>
+            For more information about the program, visit the <a href="https://www.orangecountync.gov/2932/Orange-County-Recycling-Stars-Program">Orange County Website</a>
+        </p>
+    </div>
+    
+    <div id="controls" style="margin: 10px; position: absolute; top: 50%; left: 3%">
+        <button onclick="highlightSegment(0)">Star Ratings</button>
+        <button onclick="highlightSegment(1)">Light Ratings</button>
+        <button onclick="highlightSegment(2)">Oops Ratings</button>
+        <button id="resetHighlight">Reset</button>
+      </div>
+
     <div id="map">
     </div>
-   
+    <div id="barChart">
       
-    <script src="aggregated_route_data.js"></script>
-    <style>
-        #map {
-        width: 700px; 
-        height: 700px;
-        position: absolute;
-        top: 20%;
-    }
-    </style>
+       
+    </div> 
 
 <script>
  var map = L.map('map').setView([36.011659, -79.113007], 11
         );
 
-        L.tileLayer('https:{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https:www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         }).addTo(map);
   
 
 
-        const colors = ['#4daf4a', '#FFDE21', '#FF0000'] 
+        const colors = ['#03AC13', '#FFFF00', '#FF0000'] 
 
+        let highlightIndex = null;
 
         function createDoughnutSVG(values) {
             const total = values.reduce((a, b) => a + b, 0);
@@ -93,38 +164,50 @@
          const outerR = 25;
          const innerR = 15;
 
-            for (let i=0; i<values.length; i++) {
-                var val = values [i];
-                var angle = (val/total) * 360;
-               const endAngle = startAngle + angle;
-       const largeArc = angle > 180 ? 1:0;
+            for (let i = 0; i < values.length; i++) {
+                const val = values [i];
+                const angle = (val/total) * 360;
+                const endAngle = startAngle + angle;
+                const largeArc = angle > 180 ? 1:0;
 
                 const x1 = 25 + outerR * Math.cos(Math.PI * startAngle/180);
-                const y1 = 25 + outerR * Math.sin(Math.PI * startAngle / 180);
-                const x2 = 25 + outerR * Math.cos(Math.PI * endAngle / 180);
-                const y2 = 25 + outerR * Math.sin(Math.PI * endAngle / 180);
+                const y1 = 25 + outerR * Math.sin(Math.PI * startAngle/180);
+                const x2 = 25 + outerR * Math.cos(Math.PI * endAngle/180);
+                const y2 = 25 + outerR * Math.sin(Math.PI * endAngle/180);
                 const x3 = 25 + innerR * Math.cos(Math.PI * endAngle/180);
-                const y3 = 25 + innerR * Math.sin(Math.PI * endAngle / 180);
+                const y3 = 25 + innerR * Math.sin(Math.PI * endAngle/180);
                 const x4 = 25 + innerR * Math.cos(Math.PI * startAngle/180);
-                const y4 = 25 + innerR * Math.sin(Math.PI * startAngle / 180);
+                const y4 = 25 + innerR * Math.sin(Math.PI * startAngle/180);
 
-                paths += `<path d="
+                let color;
+                if (highlightIndex === null) {
+                    color = colors[i];
+                } else {
+                    color = i === highlightIndex ? colors[i]: transparentColor(colors[i], 0.3);
+                }
+
+                paths += `
+                <path d="
                 M ${x1}, ${y1}
                 A ${outerR}, ${outerR} 0 ${largeArc},1 ${x2},${y2}
                 L ${x3},${y3}
                 A ${innerR},${innerR} 0 ${largeArc},0 ${x4},${y4}
                 Z
-            " fill="${colors[i]}" />
+            " fill="${color}" stroke="black" stroke-width="0.5"/>
             `;
                
                 startAngle = endAngle;
           }
+
+          const showLabel = highlightIndex !==null;
+          const labelValue = showLabel ? values[highlightIndex]: '';
+          const innerFill = showLabel ? 'white' : 'transparent';
            return `
                 <svg width="50" height="50" viewBox="0 0 50 50" class="doughnut-icon">
             ${paths}
             <!-- Inner white circle and center label -->
-            <circle cx="25" cy="25" r="${innerR}" fill="white"/>
-            <text x="25" y="29" font-size="10" text-anchor="middle" fill="black">${values[0]}%</text>
+            <circle cx="25" cy="25" r="${innerR}" fill="${innerFill}"/>
+            ${showLabel ? `<text x="25" y="29" font-size="10" text-anchor="middle" fill="black">${labelValue}%</text>` : ''}
             <!-- Borders -->
             <circle cx="25" cy="25" r="${outerR}" fill="none" stroke="black" stroke-width="0.5" />
             <circle cx="25" cy="25" r="${innerR}" fill="none" stroke="black" stroke-width="0.5" />
@@ -132,6 +215,19 @@
             `;
       }
         
+      function transparentColor(hex, alpha) {
+        const rgb = hexToRgb(hex);
+        return `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, ${alpha})`;
+      }
+      function hexToRgb(hex) {
+        const bigint = parseInt(hex.replace('#', ''), 16);
+        return {
+            r: (bigint >> 16) & 255,
+            g: (bigint >> 8) & 255,
+            b: bigint & 255
+        };
+      }
+
         const data = [
             {name: '4B-1', coords: [35.95143398, -79.17357477], values: [49, 23, 28]},
             {name: '1C-1', coords: [36.02893776, -79.2107417], values: [46, 26, 28]},
@@ -183,24 +279,52 @@
             {name: '9B-2', coords: [36.08376401, -79.07827612], values: [46, 16, 38]},
             {name: '9B-1', coords: [36.08657662, -79.07005818], values: [65, 14, 21]},
             {name: '3A-2', coords: [35.88691448, -79.05446463], values: [55, 15, 30]},
-            
-
-
         ];
 
-     data.forEach(loc => {
-         const icon = L.divIcon({
+    const markers = [];
+
+    data.forEach((loc, i) => {
+        const icon = L.divIcon({
             className: '',
-             html: createDoughnutSVG(loc.values),
-               iconSize: [50,50],
-                iconAnchor: [25,25]
-            });
-            L.marker(loc.coords, {icon}).addTo(map).bindPopup(loc.name);
+            html: createDoughnutSVG(loc.values),
+            iconSize: [50,50],
+            iconAnchor: [25, 25]
         });
 
-  
+    const marker = L.marker(loc.coords, { icon: icon }).addTo(map);
+    marker.bindPopup(`<b>Route ${loc.name}</b>
+    <br><br><u>Total Percentages of Ratings</u><br>Star: ${loc.values[0]}% <br>Light: ${loc.values[1]}% <br>Oops: ${loc.values[2]}%`);
+    markers.push(marker);
+});
 
+function charts() {
+    markers.forEach((marker, i) => {
+        const icon = L.divIcon({
+            className: '',
+            html: createDoughnutSVG(data[i].values),
+            iconSize: [50, 50],
+            iconAnchor: [25, 25]
+        });
+        marker.setIcon(icon);
+    });
+}
+
+function highlightSegment(index) {
+    highlightIndex = index;
+    charts();
+}
+
+document.getElementById('resetHighlight').addEventListener('click', () => {
+    highlightIndex = null;
+    charts();
+});
 
 </script>
+<img src="star-image.jpeg" alt="star-image" class="star-image"; />
+<img src="Total Proportions of Each Rating for Completed Routes (1).png" alt="Total Proportions of Each Rating for Completed Routes" class="graph";/>
+<svg>
+    Total Proportions of Each Rating for Completed Routes.svg ;
+</svg> 
 </body>
+
 </html>

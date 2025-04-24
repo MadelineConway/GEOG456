@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recycling Stars Program</title>
+    <script type="text/javascript"
+    src="aggroutedata.js">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<link rel="stylesheet" href="https:unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+     crossorigin=""/>
+
+<script src="https:unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+     crossorigin=""></script>
+
+<script src="aggroutedata.js"></script>
+
+<style>
+      body {background-color:cornflowerblue;}
+      #titleBox {
+        margin: auto;
+        top: 5%;
+        width: 1000px;
+        height: 4%;
+        padding: 25px;
+        text-align: center;
+        background-color: white;
+        border: 6px solid blue;
+      }
+      #map {
+        width: 700px; 
+        height: 700px;
+        border: 4px solid blue;
+        position: absolute;
+        top: 55%;
+        left: 8%;
+    }
+
+    #sideBar {
+        position: absolute;
+        width: 600px;
+        height: 1000px;
+        padding: 20px;
+        box-sizing: border-box;
+        top: 50%;
+        right: 5%;
+      }
+      #buttonContainer {
+        position: absolute;
+        height: 200px;
+        width: 500px;
+        top: 48%;
+        left: 2%;
+      }
+    .button {
+        margin-bottom: 8px;
+        padding: 2% 3%;
+        font-size: 13px;
+        background-color: blue;
+        color: white;
+        border: 1px solid cornflowerblue;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.3s, color 0.3s;
+    }
+    .button:hover {
+        background-color: midnightblue;
+        
+    }
+    
+    #textBox {
+        position: absolute;
+        width: 600px;
+        height: 300px;
+        right: 3%;
+        top: 46%;
+      }
+
+    #improvementChartCont {
+        position: absolute;
+        width: 550px;
+        height: 300px;
+        right: 3%;
+        top: 100%;
+        background-color: white;
+        border: 4px solid blue;
+    }
+    #improvementChart {
+        width: 100%;
+        height: 100%;
+        justify-content: center ;
+    }
+      
+      
+      h1 {
+        color:midnightblue;
+        text-align: center;
+        margin: auto;
+        left: 5%;
+      }
+      h2 {
+        color: midnightblue;
+        text-align: center;
+      }
+
+      p {
+        color: midnightblue;
+        position: absolute;
+        text-align: left;
+        margin-left: 55px;
+        margin-right: 55px;
+        top: 17%;
+        font-size: 115%;
+      }
+      #outroBox {
+        position: absolute;
+        width: 700px;
+        height: 200px;
+        left: 2%;
+        top: 140%;
+    }
+
+    .star-image {
+        position: absolute;
+        width:140px; 
+        height: 140px; 
+        right: 30px; 
+        top: 13px;
+    }
+</style>
+
+<body>
+    <div id="titleBox">
+            <h1>
+                Orange County NC Recycling Stars Program 
+            </h1>
+    </div>
+<h2>About the Program</h2>
+    <p>
+        <br>
+        The Recycling Stars Program, led by the Orange County Solid Waste Department, is a county-wide public education project to improve residential recycling practices.
+        Through the program, a team of interns travels by van to residential areas within the county to evaluate the recycling bins of single-family homes that have been put out for collection that day.
+        Around 100-200 addresses are evaluated per day, categorized as routes, and each route is revisited a total of four times for evaluations. 
+        <br><br>During each evalutation, data is collected on each individual cart regarding how full it is, the contaminants found, and the rating it was given based on what was found in the cart.
+        "Star" ratings are given to carts that have no or minimal contaminants, "Light" ratings are given to the carts with five or more mild contaminants, and "Oops" ratings are given to carts containing severe contaminants such as plastic bags/wrap, lithium ion batteries, or hazardous waste.
+        After each cart is evaluated, a letter is attached providing the residents with a reminder about the program, information on which rating their cart receieved, and handwritten feedback describing the specific non-recyclable items that were found in their cart. 
+    </p>
+<div id="map"></div>
+<div id="buttonContainer">
+  <button class="button" id="totalsbutton" style>Totals</button>
+  <button class="button" id="highlight-stars" style>Stars</button>
+  <button class="button" id="highlight-lights" style>Lights</button>
+  <button class="button" id="highlight-oopses" style>Oopses</button>
+   <br><br>
+  <button class="button" id="vis1button" style>Visit 1</button><br><br>
+  <button class="button" id="vis2button" style>Visit 2</button><br><br>
+  <button class="button" id="vis3button" style>Visit 3</button><br><br>
+  <button class="button" id="vis4button" style>Visit 4</button>
+  
+</div>
+ 
+    <div id="improvementChartCont">
+        <canvas id="improvementChart" style="box-sizing: border-box; display: block; height: 200px; width: 200px;" width="600" height="350"></canvas>
+    </div>
+    <div id="textBox">
+      <h2>
+        Mapping the Data</h2>
+        <p>
+            The map on the left displays the total proportions of every rating received across all four evaluations for each completed route.
+            <br><br><span style="color: green;"><b>Green</b></span> represents Star ratings, <span style="color: rgb(226, 218, 2);"><b>Yellow</b></span> represents Light ratings, and <span style="color: red;"><b>Red</b></span> represents Oops ratings.<br><br>
+            Click the buttons above the map to highlight the specific percentages of each rating that routes received across all four evaluations. Then click on a route to view details about the total numbers of each rating it received.<br>
+            Click the buttons on the left of the map to view how proportions of the ratings change over the course of the evaluation visits. Then click on a route to view the date it was visited and the number of each rating it received for that round.
+           
+        </p>
+    </div>
+  
+<div id="outroBox">
+  <p>
+      For more information about the program, visit the <a href="https://www.orangecountync.gov/2932/Orange-County-Recycling-Stars-Program">Orange County Website</a>
+  </p>
+</div>
+<div id="highlight-controls">
+
+</div>
+   
+<script>
+  console.log(aggroutedata);
+</script>
+<script>
+  const map = L.map('map').setView([36.011659, -79.113007], 11);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+  
+  const colors = ['#03AC13', '#FFFF00', '#FF0000'];
+  let currentVisit = 'total'; // or visit1, visit2, etc.
+  let markers = [];
+
+  let highlightedSegment = null;
+
+  const highlightButtons = {
+  S: document.getElementById('highlight-stars'),
+  L: document.getElementById('highlight-lights'),
+  O: document.getElementById('highlight-oopses')
+};
+
+Object.entries(highlightButtons).forEach(([key, button]) => {
+  button.addEventListener('click', () => {
+    // Toggle selection
+    if (highlightedSegment === key) {
+      highlightedSegment = null;
+      button.style.backgroundColor = ''; // Reset color
+    } else {
+      // Deselect all buttons
+      Object.values(highlightButtons).forEach(btn => btn.style.backgroundColor = '');
+      // Select this one
+      highlightedSegment = key;
+      button.style.backgroundColor = 'midnightblue';
+    }
+    addMarkers(currentVisit);
+  });
+});
+  
+  // Create the donut chart icon
+  function createDonutIcon(props, visit = 'total', size = 45) {
+    const radius = size / 2;
+  const innerRadius = radius * 0.6;
+
+  const data = [
+    { key: 'S', value: props[`${visit}_S_perc`], color: colors[0] },
+    { key: 'L', value: props[`${visit}_L_perc`], color: colors[1] },
+    { key: 'O', value: props[`${visit}_O_perc`], color: colors[2] }
+  ];
+
+  const total = data.reduce((sum, d) => sum + d.value, 0);
+  let startAngle = -Math.PI / 2;
+  const paths = [];
+
+  data.forEach(segment => {
+    const angle = (segment.value / total) * 2 * Math.PI;
+    const endAngle = startAngle + angle;
+
+    const x1 = radius + radius * Math.cos(startAngle);
+    const y1 = radius + radius * Math.sin(startAngle);
+    const x2 = radius + radius * Math.cos(endAngle);
+    const y2 = radius + radius * Math.sin(endAngle);
+
+    const x3 = radius + innerRadius * Math.cos(endAngle);
+    const y3 = radius + innerRadius * Math.sin(endAngle);
+    const x4 = radius + innerRadius * Math.cos(startAngle);
+    const y4 = radius + innerRadius * Math.sin(startAngle);
+
+    const opacity = !highlightedSegment || highlightedSegment === segment.key ? 1 : 0.3;
+    const largeArc = angle > Math.PI ? 1 : 0;
+
+    const path = `<path d="M ${x1} ${y1}
+        A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2}
+        L ${x3} ${y3}
+        A ${innerRadius} ${innerRadius} 0 ${largeArc} 0 ${x4} ${y4}
+        Z"
+        fill="${segment.color}" fill-opacity="${opacity}" stroke="midnightblue" stroke-width="0.7" />`;
+
+    paths.push(path);
+    startAngle = endAngle;
+  });
+
+  const highlighted = data.find(d => d.key === highlightedSegment);
+  const centerText = highlighted
+  ? `<circle cx="${radius}" cy="${radius}" r="${innerRadius - 0.7}" fill="white"/>
+     <text x="${radius}" y="${radius}" text-anchor="middle" dominant-baseline="central"
+           font-size="10"  font-weight="semibold" fill="black">
+       ${Math.round(highlighted.value)}%
+     </text>`
+  : '';
+
+  const svgString = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}">
+      ${paths.join('\n')}
+      ${centerText}
+      <circle cx="${radius}" cy="${radius}" r="${radius - 0.5}" fill="none" stroke="midnightblue" stroke-width="0.5"/>
+    </svg>
+  `;
+
+  return L.divIcon({
+    className: 'donut-icon',
+    html: svgString,
+    iconSize: [size, size],
+    iconAnchor: [size / 2, size / 2],
+    popupAnchor: [0, -size / 2]
+  });
+}
+  
+  // Create all markers
+  function addMarkers(visit) {
+    markers.forEach(m => map.removeLayer(m));
+    markers = [];
+  
+    aggroutedata.features.forEach(feature => {
+      const props = feature.properties;
+      const coords = [feature.geometry.coordinates[1], feature.geometry.coordinates[0]];
+      const icon = createDonutIcon(props, visit);
+      const marker = L.marker(coords, { icon });
+  
+      let popupContent = `<strong>Route ${props.route}</strong><br/>`;
+      if (visit === 'total') {
+        popupContent += `<u>Total number of</u> <br>Stars: ${props.total_S_cnt}<br/>Lights: ${props.total_L_cnt}<br/>Oopses: ${props.total_O_cnt}`;
+      } else {
+        popupContent += `Visit Date: ${props[`${visit}_date`]}<br/>`;
+        popupContent += `<u>Number of</u> <br>Stars: ${props[`${visit}_S_cnt`]}<br/>Lights: ${props[`${visit}_L_cnt`]}<br/>Oopses: ${props[`${visit}_O_cnt`]}`;
+      }
+  
+      marker.bindPopup(popupContent);
+      marker.addTo(map);
+      markers.push(marker);
+    });
+  }
+  
+  // Setup buttons
+  const visitMap = {
+    totalsbutton: 'total',
+    vis1button: 'visit1',
+    vis2button: 'visit2',
+    vis3button: 'visit3',
+    vis4button: 'visit4'
+  };
+  
+  let selectedButton = null;
+  Object.keys(visitMap).forEach(buttonId => {
+    const button = document.getElementById(buttonId);
+    button.addEventListener('click', () => {
+      if (selectedButton) {
+        selectedButton.style.backgroundColor = 'blue';
+      }
+      button.style.backgroundColor = 'midnightblue';
+      selectedButton = button;
+  
+      currentVisit = visitMap[buttonId];
+      addMarkers(currentVisit);
+    });
+  });
+  
+  // Initialize with totals
+  addMarkers('total');
+  document.getElementById('totalsbutton').style.backgroundColor = 'midnightblue';
+  selectedButton = document.getElementById('totalsbutton');
+  
+  function createImprovementChart() {
+    const routes = [];
+    const improvementRates = [];
+
+    aggroutedata.features.forEach(feature => {
+      const props = feature.properties;
+      routes.push(`${props.route}`);
+      improvementRates.push(props.improvement_rate); 
+    });
+
+    const ctx = document.getElementById('improvementChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: routes,
+        datasets: [{
+          label: 'Improvement Rate (%)',
+          data: improvementRates,
+          backgroundColor: 'midnightblue',
+          borderColor: 'blue',
+          borderWidth: 1
+          
+        }]
+      },
+      options: {
+        layout: {
+          padding: {
+            top: 20,
+            bottom: 20,
+            right: 10,
+            left: 10
+          }
+        },
+        plugins: {
+      title: {
+        display: true,
+        text: ['Improvement Rates:',
+         'How many houses that received an Oops on their first evaluation', 
+         'then received a Star or Light on their last evaluation',
+        ],
+        color: 'midnightblue',    
+        font: {
+          size: 13,         
+            
+        },
+        padding: {
+          top: 2,
+          bottom: 20
+        }
+      },
+      legend: {
+            display: false
+          },
+          tooltip: {
+            callbacks: {
+              color: 'midnightblue',
+              label: context => `${context.parsed.y.toFixed(1)}%`
+            }
+          }
+    },
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            ticks: {
+              color: 'midnightblue',
+              callback: value => `${value}%`
+            },
+            grid: {
+              drawTicks: true,
+              color: 'transparent'
+            },
+            title: {
+              display: false,
+              text: 'Rate of Improvement' ,
+              color: 'midnightblue',
+            }
+          },
+          x: {
+            ticks: {
+              color: 'midnightblue',
+              maxRotation: 90,
+              minRotation:90,
+              display: false
+            },
+            title: {
+              color: 'midnightblue',
+              display: true,
+              text: 'Routes',
+              
+              
+            }
+          }
+        },
+  
+      }
+    });
+  }
+
+ 
+  createImprovementChart();
+  </script>
+  
+<img src="star-image.jpeg" alt="star-image" class="star-image"; />
+
+</body>
+
+</html>
